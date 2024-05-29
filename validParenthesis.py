@@ -61,7 +61,7 @@ class Solution():
         dict = {"]": "[", ")": "(", "}": "{"}
 
         # if Left bracket then we append
-        # if Right bracket, stack is not empty then we check top item is it the opposite bracket if it is not means false
+        # if Right bracket, stack is not empty then we check top item is it the opposite bracket if it i not means false
         # if Right bracket, stack is empty then return false
         
         for char in s:
