@@ -64,11 +64,6 @@ class Solution:
             res[tuple(count)].append(s)
         return res.values()
                 
-
-
-
-
-
 sol = Solution()
 strs = ["eat","tea","tan","ate","nat","bat"]
 
