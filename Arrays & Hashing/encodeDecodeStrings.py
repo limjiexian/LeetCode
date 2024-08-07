@@ -26,8 +26,8 @@ class Solution:
         i, j = 0, 0
         
         while i < len(s):
-            print("i = ", i)
-            print("s = ", s[i])
+            # print("i = ", i)
+            # print("s = ", s[i])
 
             if s[i] != "#":
                 count = count + s[i]
@@ -35,7 +35,7 @@ class Solution:
             else:
                 j = int(count) + i + 1
                 sliced = s[i+1:j]
-                print("sliced = ", sliced)
+                # print("sliced = ", sliced)
                 decodedString.append(sliced)
                 i = j
                 count = ""
