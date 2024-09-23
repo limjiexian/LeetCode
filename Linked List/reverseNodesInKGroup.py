@@ -6,73 +6,62 @@ class ListNode:
         self.val = val
         self.next = next
 
+# go through the entire LL
+# after traversing K node, we send this K nodes into our reverse function and then append the reversed set into listOfLL
+# once we processed all the set
+# then we go through the list of LL to connect these sets together and return the head of the combined set
+
 class Solution:
     def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
-        # given head of a singly linked list
-        # and a positive integer k
-        # u must reverse first k nodes in the linkedlist
-        # and then reverse the next k nodes
-        # if k = 3
-        # 1 > 2 > 3 > 4 > 5 > 6
-        # 3 > 2 > 1 > 6 > 5 > 4
+        start = curr = head
+        first = 0
+        listOfLL = []
 
-        # if fewer than k nodes then dont reverse
-        # return the modified list after reversing
+        while start:
+            count = 0
 
-        curr = head
+            # pass in curr = 1
+            while count < k-1 and curr:
+                curr = curr.next
+                count += 1
+
+            if curr is None:
+                reversedHead, reversedTail = start, curr
+                listOfLL.append((reversedHead, reversedTail))
+                break
+
+            temp = curr.next    # 4
+            curr.next = None    # 3 > None
+            reversedHead, reversedTail = self.reverse(start)    # pass in 1 > 2 > 3
+            listOfLL.append((reversedHead, reversedTail))
+
+            start = curr = temp
+            count = 0
+
+        # link all the ll together
+        i = 0
+        firstHead, firstTail = listOfLL[0]
+
+        while i < len(listOfLL):
+            rHead1, rTail1 = listOfLL[i]
+            rHead2, rTail2 = listOfLL[i+1] if i+1 < len(listOfLL) else (None, None)
+
+            if rTail1 is not None:
+                rTail1.next = rHead2
+
+            i += 1
+
+        return firstHead
+            
+
+    def reverse(self, head) -> Optional[ListNode]:
+        tail, curr = head, head
+        prev = None
 
         while curr:
-            
-            # come in
-            # 1 > 2 > [3]
-            # temp = [3].next aka = 4
-            # [3].next = None
-            # pass in [1]
-            # get back
-            # 3 > 2 > 1
-            # [1].next set to [4]
-
-            # repeat above process until we reach the end
-            # special case if count < k we simply dont touch
-
-            # check if count < k
-            count = 0
-            start = curr
-
-            while start:
-                count += 1
-                start = start.next
-
-            if count < k:
-                return head
-            else:
-                s, t = self.reverse(curr)
-                t.next = start
-                curr = start
-                count = 0
-
-            
-
-    def reverse(self, list1: ListNode) -> (Optional[ListNode], Optional[ListNode]):
-
-        prev, curr = None, list1
-        tail = list1
-
-        while curr:        
-            temp = curr.next    
+            temp = curr.next
             curr.next = prev
             prev = curr
             curr = temp
-        
-        head = prev
 
-        return head, prev   # node 3 and node 1
-
-
-    
-
-
-
-
-
-            
+        return prev, tail
