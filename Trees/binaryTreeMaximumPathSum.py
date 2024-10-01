@@ -17,7 +17,6 @@ class Solution:
         # Requirement -> node cannot repeat in a path aka must make sure there is no cycle
 
         # what we might need
-        # a way to track if a node is repeated or if we are in a cycle
         # get the max path that are reacheable for each node
         # maybe solve using recursive dfs?
         # they want us to get the cumulated max node value NOT the # of edges
@@ -32,7 +31,7 @@ class Solution:
             leftMax = dfs(root.left)
             rightMax = dfs(root.right)
 
-            # special case (if u dont do this u wont get the correct ans)
+            # special case
             # leftMax or rightMax contains pathvalue = negative.
             # so e.g. if leftMax = -10, we do not want to calculate the latest maxpath for this subtree to be leftmax+ rightmax + root node
             # because this will not yield the latest maxpath. if we got negative for leftmax we should only do rightmax+root node val
@@ -55,3 +54,9 @@ class Solution:
         dfs(root)
 
         return res[0]
+    
+
+        # time complexity we are basically going through each node once via our DFS -> therefore O(n)
+
+        # space complexity, recursion stack used during DFS traversal means it will be O(height of the tree)
+        # if tree is skewed, then worst case will be O(n), best case is balanced tree = O(log n)
