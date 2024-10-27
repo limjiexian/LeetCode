@@ -1,3 +1,4 @@
+from collections import deque
 from typing import List
 
 
@@ -12,14 +13,6 @@ class Solution:
         # Task
         # set each land cell with the dist to its nearest treasure chest
         # if land cell cannot reach any treasure chest -> let it remain INF
-
-        # Thought process
-        # for each INF we recurrsively see if we can traverse to treasure chest
-        # each recursion, we return if we cant progress anymore or if we reached the treasure chest
-        # as we progress on each step, we increase count +=1, if we reach treasure chest we will return
-        # the final count value
-
-        # for the 4 direction path, we get the smallest count value and save to the INF
 
         visited = set()
 
