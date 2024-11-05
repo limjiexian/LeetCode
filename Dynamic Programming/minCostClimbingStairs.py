@@ -41,6 +41,28 @@ from typing import List
 
 # Neetcode Bottom up method
 
+class Solution:
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        
+        # cost [1, 2, 3]
+        #      [x, x, 3, x]
+        #          o  t
+
+        size = len(cost) # 3
+        one = 0
+        two = 0
+        
+        for i in range(size-1, -1, -1):
+            temp = one
+
+            # min(self+one, self+two)
+            one = min(cost[i] + one, cost[i] + two)
+            two = temp
+        
+        return min(one, two)
+
+
+
 
         
 
