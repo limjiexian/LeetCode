@@ -17,19 +17,80 @@ class Solution:
         # Goal
         # - return the number of ways to decode a string s
 
-        dp = dp2 = 0
-        dp1 = 1
+        """ DFS brute force """
+        # def dfs(i):
+        #     # base case 
+        #     if i == len(s):
+        #         return 1
+
+        #     if s[i] == "0":
+        #         return 0
+
+        #     count = dfs(i+1)
+
+        #     if i+1 < len(s) and int(s[i:i+2]) <= 26:
+        #         count += dfs(i+2)
+
+        #     return count
+
+        # return dfs(0)
+
+        
+        """ DFS cache """
+        # memo = {i: -1 for i in range(len(s))}
+
+        # def dfs(i):
+        #     if i == len(s):
+        #         return 1
+
+        #     if memo[i] != -1:
+        #         return memo[i]
+            
+        #     if s[i] == "0":
+        #         return 0
+
+        #     memo[i] = dfs(i+1)  
+            
+        #     if i+1 < len(s) and int(s[i:i+2]) <= 26:
+        #         memo[i] += dfs(i+2)
+            
+        #     return memo[i] 
+
+        # dfs(0)
+
+        # return memo[0] if memo[0] != -1 else 0
+
+        """ Iterative Bottom up """
+
+        # memo = [0] * (len(s) + 1)
+        # memo[len(s)] = 1  # Base case: one way to decode an empty string
+
+        # for i in range(len(s)-1, -1, -1):
+        #     if s[i] == "0":
+        #         memo[i] = 0
+        #     else:
+        #         memo[i] = memo[i+1]
+
+        #         if i+1 < len(s) and int(s[i:i+2]) <= 26:
+        #             memo[i] += memo[i+2]
+
+        # return memo[0]
+
+        """ Two Pointer """
+        front, back = 1, 0
 
         for i in range(len(s)-1, -1, -1):
             if s[i] == "0":
-                dp = 0
+                current = 0
             else:
-                dp = dp1
-            
-            if i + 1 < len(s) and (s[i] == "1" or s[i] == "2" and s[i+1] in "0123456"):
-                dp += dp2
-            
-            dp, dp1, dp2 = 0, dp, dp1
+                current = front
+
+                if i+1 < len(s) and int(s[i:i+2]) <= 26:
+                    current += back
+                
+            temp = front
+            front = current
+            back = temp
         
-        return dp1
+        return front
             
