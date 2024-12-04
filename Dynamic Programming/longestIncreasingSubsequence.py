@@ -3,54 +3,63 @@ from typing import List
 
 class Solution:
     def lengthOfLIS(self, nums: List[int]) -> int:
-        # Given: 
-        # - an integer array nums
-        
-        # Goal:
-        # - return the length of the longest strictly increasing subsequence
-        
-        """
-        Thought process:
-        
-        i am thinking, we can traverse the list, and then for each number check if it is larger than or equal nums[i+1]. If larger, we remove that element?
+        """ dfs brute force """
+        # def dfs(i, j):
+        #     # base case
+        #     if i >= len(nums):
+        #         return 0 # no more choices so return 0
 
-        [9, 1, 4, 2, 3, 3, 7]
-        [1, 2, 3, 7]
+        #     # exclude
+        #     LIS = dfs(i+1, j)
 
-
-        [0, 3, 1, 3, 2, 3]
-        [0, 1, 2, 3]
-
-        seems like it works so far ok lets try implement this with backtracking. 
-        hmm actually nvm, think just use a for loop do can already, dont need backtracking LOL
-        
-        additional condition -> not only that the num[i] must be <= nums[i+1], it must also be smaller than the numbers that came before it
-        """
-        count = 0 
-        minNum = float("inf")
-
-        for i in range(len(nums)):
-            if i+1 > len(nums)-1:
-                break
+        #     # include
+        #     if j == -1 or nums[j] < nums[i]:
+        #         LIS = max(LIS, dfs(i+1, i) + 1)   # cos we include so add 1
             
-            # check if nums[i] is smaller than nums[i+1]
-            if nums[i] < nums[i+1]:
-                # if smaller, check if nums[i] is smaller than elements that came before it
-                if nums[i] >= minNum:
-                    count += 1
-                    minNum = float('inf')
-                
-                minNum = min(minNum, nums[i])
-            else:
-                count += 1
-
+        #     return LIS
         
-        size = len(nums)
-        output = size - count
+        # return dfs(0, -1)
 
-        return output
+        """ with cache """
+        # memo = {i: {} for i in range(len(nums))}
+
+        # def dfs(i, j):
+        #     if i >= len(nums):
+        #         return 0
+            
+        #     if j in memo[i]:
+        #         return memo[i][j]
+
+        #     # exclude
+        #     LIS = dfs(i+1, j)
+
+        #     # include
+        #     if j == -1 or nums[i] > nums[j]:
+        #         LIS = max(LIS, dfs(i+1, i) + 1)
+
+        #     memo[i][j] = LIS
+
+        #     return memo[i][j]
+
+        # dfs(0, -1)
+
+        # return memo[0][-1]
+
+        """ iterative bottom up """
+        # cos if we dont include current cos of future, by default we should have LIS 1 for this nums[i] element
+        dp = {i: 1 for i in range(len(nums))}
+
+        for i in range(len(nums)-1, -1, -1):
+            for j in range(i+1, len(nums)):
+                # include
+                # +1 is for including current nums[i]
+                # dp[j] is to get the future LIS
+                if nums[i] < nums[j]:
+                    dp[i] = max(dp[i], dp[j] + 1) # left -> dp[i] is basically our exclude and our default 1 value 
+
+        return max(dp.values())
 
 
-s = Solution()
 
-s.lengthOfLIS(nums=[9,1,4,2,3,3,7])
+
+
