@@ -45,19 +45,23 @@ class Solution:
 
         # return memo[0][-1]
 
-        """ iterative bottom up """
-        # cos if we dont include current cos of future, by default we should have LIS 1 for this nums[i] element
-        dp = {i: 1 for i in range(len(nums))}
+        """ Iterative Bottom Up Approach """
 
+        dp = [1] * (len(nums))
+        
         for i in range(len(nums)-1, -1, -1):
-            for j in range(i+1, len(nums)):
-                # include
-                # +1 is for including current nums[i]
-                # dp[j] is to get the future LIS
-                if nums[i] < nums[j]:
-                    dp[i] = max(dp[i], dp[j] + 1) # left -> dp[i] is basically our exclude and our default 1 value 
+            # LIS at dp[i] stores the length of the longest increasing subsequence (LIS) starting at index i.
+            # i.e. is the max of (selecting dp[i] itself only, select dp[i] and the LIS of dp[j])
+            # say we have 1, 2, 4, 3
+            # LIS of 3 will be 3 itself and i+1
+            # LIS of 4 will be max(itself, itself and then select future aka LIS 3) == max(itself, 1 + LIS3)
+            # LIS of 2 got 2 path, we either max(select itself, select itself and select future LIS 4) or max(select itself, select itself and skip LIS 3 and select future LIS 3)
 
-        return max(dp.values())
+            for j in range(i+1, len(nums)):
+                if nums[i] < nums[j]:
+                    dp[i] = max(dp[i], 1 + dp[j])
+        
+        return max(dp)
 
 
 

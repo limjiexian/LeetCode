@@ -2,103 +2,72 @@ from typing import List
 
 
 class Solution:
-    def lengthOfLIS(self, nums: List[int]) -> int:
-        # Given: 
-        # - an integer array nums
-        
-        # Goal:
-        # - return the length of the longest strictly increasing subsequence
-        
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        """
+        Given
+        - array of integers -> cost
+            - cost[i] -> the cost of taking a step at ith floor
+            - after paying the cost -> can choose step +1 or step +2
+        - can choose to start from index 0 or index 1
 
-        """ Brute Force """
-    
-        # # check if valid
-        # def check_valid(array):
-        #     i = 0
-        #     while i+1 < len(array):
-        #         if array[i] >= array[i+1]:
-        #             return False
+        Task
+        - return min cost to reach the top of the staircase (go beyond the last index in cost)
 
-        #         i += 1
+        """
+       
+       # Brute Force
+        # def dfs(i, total):      
+        #     if i >= len(cost):
+        #         return total
 
-        #     return True
+        #     # 1 step
+        #     minCost = dfs(i+1, total + cost[i])
 
-        # max_length = float('-inf')
-        # sol = []
+        #     # 2 steps
+        #     minCost = min(minCost, dfs(i+2, total + cost[i]))
 
-        # def dfs(i, max_length):
-        #     # nonlocal max_length 
+        #     return minCost
 
-        #     if i == len(nums):
-        #         if check_valid(sol):
-        #             max_length = max(max_length, len(sol))
-        #         return max_length
-            
-        #     # include
-        #     sol.append(nums[i])
-        #     l1 = dfs(i+1, max_length)
-        #     sol.pop()
+        # return min(dfs(0, 0), dfs(1, 0))
 
-        #     # exclude
-        #     return max(l1, dfs(i+1, max_length))
+        # print(dfs(0, 0))
+        # print(dfs(1, 0))
 
-        # return dfs(0, max_length)
-
-        # # return max_length
-
-
-        """ With Cache """
-
+        # Cache
         memo = {}
-        max_num = float("-inf")
 
-        def dfs(i, length, max_num):
-            print()
-            print(f"dfs({i})")
-
-            if i == len(nums):
-                return length
-
+        def dfs(i, total):
+            if i >= len(cost):
+                return total
+            
             if i in memo:
                 return memo[i]
-
-            # include
-            include_len = length
-            if max_num < nums[i]:
-                print("include -> nums[i] = ", nums[i])
-                print("include -> max_num = ", max(max_num, nums[i]))
-                include_len = dfs(i+1, length+1, max(max_num, nums[i]))
-                print()
-                print(f"back to dfs({i})")
-
-            # exclude
-            print("exclude -> nums[i] = ", nums[i])
-            print("exclude -> max_num = ", max_num)
-            exclude_len = dfs(i+1, length, max_num)
-            print()
-            print(f"back to dfs({i})")
             
-
-            memo[i] = max(include_len, exclude_len)
+            m1 = dfs(i+1, total + cost[i])
+            m2 = dfs(i+2, total + cost[i])
+            memo[i] = min(m1, m2)
 
             return memo[i]
-            
-        dfs(0, 0, max_num)
-
-        return memo[0]
 
 
-# dfs(0)
-# 1, 2
+        dfs(0, 0)
 
-# 9
-# dfs exclude 9
-#     - dfs include 1
-#         - 
+        sol = memo[0]
 
+        print(memo[0])
+        
+        # memo = {}
+        
+        # dfs(1, 0)
+
+        # sol = min(sol, memo[1])
+
+        # return sol
+
+
+cost=[1,2,1,2,1,1,1]
 
 s = Solution()
-nums=[0,1,0,3,2,3]
 
-s.lengthOfLIS(nums)
+s.minCostClimbingStairs(cost)
 
