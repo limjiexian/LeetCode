@@ -61,23 +61,32 @@ class Solution:
         # return memo[0]
 
 
-        """ Iterative Bottom Up """
-        n = len(s) + 1
-        dp = [False] * (n) # + 1 cos we need include "" empty string case
-        dp[0] = True # cos dp[0] is a makeable as we dont need any word in wordDict to make it cos it is a empty string -> thats why True
+        """ Iterative Bottom Up start from 0 """
+        # n = len(s) + 1
+        # dp = [False] * (n) # + 1 cos we need include "" empty string case
+        # dp[0] = True # cos dp[0] is a makeable as we dont need any word in wordDict to make it cos it is a empty string -> thats why True
 
-        for i in range(n):
-            for j in range(i):
-                if dp[j] and s[j:i] in wordDict:
+        # for i in range(n):
+        #     for j in range(i):
+        #         if dp[j] and s[j:i] in wordDict:
+        #             dp[i] = True
+        #             break # if we already found dp[i] is solvable then we dont need to continue loop our j so we break
+
+        # return dp[-1]
+
+
+        """ Iterative Bottom Up start from n"""
+        dp = [False] * (len(s) + 1)
+        dp[len(s)] = True # Base case: an empty string is always "segmentable"
+
+        for i in range(len(s)-1, -1, -1):
+            for j in range(i, len(s)):
+                word = s[i:j+1]
+                
+                if word in wordDict and dp[j+1]:
                     dp[i] = True
-                    break # if we already found dp[i] is solvable then we dont need to continue loop our j so we break
-
-        return dp[-1]
-
-
-
-
-
+                
+        return dp[0]
 
 
 
