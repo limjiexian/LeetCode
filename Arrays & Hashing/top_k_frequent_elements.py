@@ -71,13 +71,14 @@ class Solution:
         res = []
 
         for i in range(len(freq_table)-1, -1, -1):
-            if k == 0:
-                break
-
             for num in freq_table[i]:
                 res.append(num)
                 k -= 1
 
+                if k == 0:
+                    return res
+
         return res
 
-
+        # [represent the freq count]
+        # [the element that has that amount of freq ]
