@@ -74,3 +74,23 @@ class Solution:
 
 
 
+        """ my own Sorting ver that is more intuitive """
+        # nums.sort()
+        # max_streak = 0
+        # i = 0
+         
+        # while i < len(nums):
+        #     streak = 0
+        #     curr = nums[i] 
+
+        #     while i < len(nums) and curr == nums[i]:
+        #         streak += 1
+        #         curr += 1
+        #         i += 1
+
+        #         while i < len(nums) and nums[i] == nums[i-1]:
+        #             i += 1
+            
+        #     max_streak = max(max_streak, streak)
+            
+        # return max_streak

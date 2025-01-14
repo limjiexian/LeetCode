@@ -1,3 +1,6 @@
+from typing import List
+
+
 class Solution:
     def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
         # two integer arrays nums1, and nums2
@@ -36,6 +39,10 @@ class Solution:
             # i is the partition index for A, mid-point in binary search.
             i = (l + r) // 2
             # j is the partition index for B, calculated to ensure left and right sides of both arrays combine to half.
+            # half == number of elements we have for first half
+            # i + 1 == number of elements we have from partition A
+            # half - (i + 1) == number of elements we have for partition B
+            # we need - 1 to (half - (i + 1)) again to account for indexed-0 system for j indices 
             j = half - i - 2  # Offset by 2 because indices start from 0.
 
             # Determine the elements just before and after the partition in A.
