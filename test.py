@@ -1,73 +1,40 @@
-from typing import List
-
-
 class Solution:
-    def minCostClimbingStairs(self, cost: List[int]) -> int:
-        """
-        Given
-        - array of integers -> cost
-            - cost[i] -> the cost of taking a step at ith floor
-            - after paying the cost -> can choose step +1 or step +2
-        - can choose to start from index 0 or index 1
+    def minWindow(self, s: str, t: str) -> str:
+        t_map, s_map = {}, {}
 
-        Task
-        - return min cost to reach the top of the staircase (go beyond the last index in cost)
-
-        """
-       
-       # Brute Force
-        # def dfs(i, total):      
-        #     if i >= len(cost):
-        #         return total
-
-        #     # 1 step
-        #     minCost = dfs(i+1, total + cost[i])
-
-        #     # 2 steps
-        #     minCost = min(minCost, dfs(i+2, total + cost[i]))
-
-        #     return minCost
-
-        # return min(dfs(0, 0), dfs(1, 0))
-
-        # print(dfs(0, 0))
-        # print(dfs(1, 0))
-
-        # Cache
-        memo = {}
-
-        def dfs(i, total):
-            if i >= len(cost):
-                return total
-            
-            if i in memo:
-                return memo[i]
-            
-            m1 = dfs(i+1, total + cost[i])
-            m2 = dfs(i+2, total + cost[i])
-            memo[i] = min(m1, m2)
-
-            return memo[i]
-
-
-        dfs(0, 0)
-
-        sol = memo[0]
-
-        print(memo[0])
+        for i in range(len(t)):
+            t_map[t[i]] = 1 + t_map.get(t[i], 0)
         
-        # memo = {}
+        # print(t_map.items())
         
-        # dfs(1, 0)
+        need = len(t_map)
+        have = 0
+        
+        res = ""
+        res_len = float('inf')
 
-        # sol = min(sol, memo[1])
+        for i in range(len(s)):
+            have = 0
 
-        # return sol
+            for j in range(i, len(s)):
+                c = s[j]
+                s_map[c] = 1 + s_map.get(c, 0)
+
+                if c in t_map and t_map[c] == s_map[c]:
+                    have += 1
+                
+                if have == need and (j-i+1) < res_len:
+                    res = s[i:j+1]
+                    res_len = j-i+1
+                    break
+
+        return res
 
 
-cost=[1,2,1,2,1,1,1]
+s="ADOBECODEBANC"
+t="ABC"
 
-s = Solution()
+sol = Solution()
+results = sol.minWindow(s, t)
 
-s.minCostClimbingStairs(cost)
-
+            
