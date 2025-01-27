@@ -64,6 +64,12 @@ def calculate_next_review(current_interval, ease_factor, grade, status, easy_bon
             next_interval = min(round(base_interval * random_factor), max_interval)
             ease_factor = 2.65
             next_status = "Mature" if next_interval > 180 else "Graduated"
+        elif grade == "Very Easy":
+            base_interval = current_interval * ease_factor * easy_bonus * 1.2
+            random_factor = random.uniform(0.9, 1.1)  # Add fuzz
+            next_interval = min(round(base_interval * random_factor), max_interval)
+            ease_factor = 2.75
+            next_status = "Mature" if next_interval > 180 else "Graduated"
         else:
             raise ValueError("Invalid grade for Graduated/Mature status.")
     
@@ -89,11 +95,18 @@ def calculate_next_review(current_interval, ease_factor, grade, status, easy_bon
     next_review_date = datetime.now() + timedelta(days=next_interval)
     return next_interval, ease_factor, next_review_date, next_status
 
+def get_valid_input(prompt, valid_choices):
+    while True:
+        user_input = input(prompt).strip()
+        if user_input in valid_choices:
+            return user_input
+        print("Invalid input. Please try again.")
+
 if __name__ == "__main__":
     print("\n--- Spaced Repetition System ---")
     
     # Ask the user if this is a brand-new card
-    is_new_card = input("Is this a brand-new card? (yes/no): ").strip().lower()
+    is_new_card = get_valid_input("Is this a brand-new card? (yes/no): ", ["yes", "no", "y", "n"])
     
     if is_new_card in ["yes", "y"]:
         # Default values for a brand-new card
@@ -103,12 +116,30 @@ if __name__ == "__main__":
         print("\nAssuming this is a brand-new card. Default values applied.")
     else:
         # Input for an existing card
-        current_interval = int(input("Enter the current interval (days): "))
-        ease_factor = float(input("Enter the current ease factor: "))
-        status = input("Enter the current status (Learning, Graduated, Mature, Relearning): ").strip()
+        while True:
+            try:
+                current_interval = int(input("Enter the current interval (days): "))
+                ease_factor = float(input("Enter the current ease factor: "))
+                status = get_valid_input(
+                    "Enter the current status (Learning, Graduated, Mature, Relearning): ",
+                    ["Learning", "Graduated", "Mature", "Relearning"]
+                )
+                break
+            except ValueError:
+                print("Invalid input. Please enter valid numerical values.")
 
-    # Ask for grade
-    grade = input("Enter the grade (Again, Hard, Good, Easy, Very Easy): ").strip()
+    # Grade options
+    grade_map = {
+        "1": "Again",
+        "2": "Hard",
+        "3": "Good",
+        "4": "Easy",
+        "5": "Very Easy"
+    }
+
+    grade_prompt = "Enter the grade:\n1) Again\n2) Hard\n3) Good\n4) Easy\n5) Very Easy\nYour choice: "
+    grade_choice = get_valid_input(grade_prompt, grade_map.keys())
+    grade = grade_map[grade_choice]
 
     # Calculate the next review details
     try:
@@ -124,4 +155,3 @@ if __name__ == "__main__":
         print(f"Updated Status: {next_status}")
     except ValueError as e:
         print(f"Error: {e}")
-
