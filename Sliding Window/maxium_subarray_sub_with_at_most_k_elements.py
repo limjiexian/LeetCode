@@ -1,35 +1,37 @@
-    
+from collections import deque
+from typing import List
 
+def max_sum_subarray_at_most_k(nums: List[int], k: int) -> int:
+    if not nums:
+        return 0
+
+    # Step 1: Compute prefix sum
     prefix_sum = [0] * len(nums)
+    prefix_sum[0] = nums[0]
+    for i in range(1, len(nums)):
+        prefix_sum[i] = prefix_sum[i - 1] + nums[i]
 
-    i = 0
-    total = 0
-    for num in nums:
-        total += num
-        prefix_sum[i] = total
-        i += 1
+    # Step 2: Initialize deque and max sum
+    q = deque()  # Monotonic deque to store [index, effective_prefix_sum]
+    max_sum = float('-inf')
 
-    q = deque()
-
-    max_subarray = float("-inf")
-
+    # Step 3: Iterate through the array
     for i in range(len(nums)):
-        # remove indices that are out of bound
-        if q and q[0] < i - k + 1:
+        # Calculate the effective prefix sum
+        effective_prefix = prefix_sum[i] - (prefix_sum[i - k] if i >= k else 0)
+
+        # Remove elements outside the valid window
+        if q and q[0][0] < i - k + 1:
             q.popleft()
 
-        # maintain monotonic deque
-        # check if this new element is larget than the elements inside the queue
-        #   - if so, we pop all these right element out
-        while q and prefix_sum[i] > prefix_sum[q[-1]]:
+        # Maintain monotonic deque: Remove smaller effective prefix sums
+        while q and effective_prefix > q[-1][1]:
             q.pop()
 
-        q.append(i)
+        # Add the current effective prefix sum with its index to the deque
+        q.append((i, effective_prefix))
 
-        # we check the max subarray value for [i-k+1, i] range
-        # but we only do this after we have at least processed k size subarray
-        # e.g. if k = 3, i needs to be at least 2, then we can process 0, 1, 2
-        if i >= k - 1 and q:
-            max_subarray = max(max_subarray,  prefix_sum[q[0]] - prefix_sum[i-k])
+        # Update the max subarray sum
+        max_sum = max(max_sum, q[0][1] if q else 0)
 
-    return max_subarray
+    return max_sum
