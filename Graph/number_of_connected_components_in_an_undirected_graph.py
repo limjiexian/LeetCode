@@ -42,10 +42,44 @@ class Solution:
 
         return count
 
+        """ Union Find version """
+        # def find(x):
+        #     if parent[x] != x:
+        #         parent[x] = find(parent[x])    
+        
+        #     return parent[x]
+        
+        # def union(x, y):
+        #     px, py = find(x), find(y)
 
+        #     if px == py:
+        #         return False
+        #     elif rank[px] > rank[py]:
+        #         # px eat py
+        #         parent[py] = px
+        #         rank[px] += rank[py]
+        #     else:
+        #         parent[px] = py
+        #         rank[py] += rank[px]
 
+        #     return True
+        
+        # parent = [i for i in range(n)]
+        # rank = [1] * n
 
+        # for e1, e2 in edges:
+        #     union(e1, e2)
+            
+        # visited = set()
+        # for i in range(n):
+        #     root = find(i)
 
+        #     if root not in visited:
+        #         visited.add(root)
+
+        # return len(visited)
+        
+        
 
 
 
