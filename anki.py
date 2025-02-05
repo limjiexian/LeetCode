@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import random
 
-def calculate_next_review(current_interval, ease_factor, grade, status, easy_bonus=1.5, max_interval=365):
+def calculate_next_review(current_interval, ease_factor, grade, status, easy_bonus=1.1, max_interval=365):
     """
     Calculate the next review interval and ease factor based on the grade and status.
 
@@ -59,13 +59,13 @@ def calculate_next_review(current_interval, ease_factor, grade, status, easy_bon
             next_interval = min(round(base_interval * random_factor), max_interval)
             next_status = "Mature" if next_interval > 180 else "Graduated"
         elif grade == "Easy":
-            base_interval = current_interval * ease_factor * easy_bonus
+            base_interval = current_interval * ease_factor
             random_factor = random.uniform(0.9, 1.1)  # Add fuzz
             next_interval = min(round(base_interval * random_factor), max_interval)
             ease_factor = 2.65
             next_status = "Mature" if next_interval > 180 else "Graduated"
         elif grade == "Very Easy":
-            base_interval = current_interval * ease_factor * easy_bonus * 1.2
+            base_interval = current_interval * ease_factor * easy_bonus
             random_factor = random.uniform(0.9, 1.1)  # Add fuzz
             next_interval = min(round(base_interval * random_factor), max_interval)
             ease_factor = 2.75
